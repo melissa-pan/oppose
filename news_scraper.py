@@ -27,7 +27,7 @@ def news_scrape(url):
 
     if "thestar" in url:
         return ("torontosun", keywords)
-    else "torontosun" in url:
+    elif "torontosun" in url:
         return ("thestar",keywords)
     else:
         raise NotImplementedError("Sorry, this news site is not currently supported yet")
