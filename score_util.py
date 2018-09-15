@@ -2,11 +2,13 @@
 # Utility Functions that extract and calculate keywords
 ####################################################################################
 import nltk
+import math
 from nltk.corpus import stopwords
 
 # Constant
 stop_words = set(stopwords.words('english'))
-
+my_stop_words = ['']
+stop_words = set(list(stop_words) + my_stop_words)
 
 ####################################################################################
 # keywordsInDoc  
@@ -27,39 +29,50 @@ def keywordsInDoc(string_block,numKw):
     if string_block is None:
         return None
 
+    # # Debug message 
+    # print("starting to generate {} keywords in string block: \n {} \n".format(numKw, string_block))
+
     # Document parse
     # --------------------------------------------------------------
+    string_block = string_block.lower()
     word_list = string_block.split()
     word_list = [''.join(filter(str.isalnum, x)) for x in word_list] 
     # Generate unique list of words and remove stop word
     uniq_list = [w for w in list(set(word_list)) if not w in stop_words] 
+    # # Debug message
+    # print("word list is: {}\n".format(word_list))
+    # print("unique word is: {}\n".format(uniq_list))
+
     # return word with equal score if number of unique word is less than the 
     # specified number of keywords
     if len(uniq_list) < numKw:
-        word_score = {(k,1) for k in uniq_list}
+        word_score = {k : 1 for k in uniq_list}
         return word_score
 
     
     # Calculate TF-IDF score for all unique words
     # --------------------------------------------------------------
     # TF score
-    word_freq = {(k,word_list.count(k)) for k in uniq_list}
-    tf_score = {(k,word_freq[k]/len(word_list)) for k in uniq_list}
+    word_freq = {k : word_list.count(k) for k in uniq_list}
+    tf_score = {k : word_freq[k]/len(word_list) for k in uniq_list}
+
+    # print ("word score is: {}".format(tf_score))
+
     # IDF score
     sentences = string_block.splitlines()
     word_occurance = {}
     for s in sentences:
         # Get a list of all words in the sentence without special characters
-        words = s.split()
-        words = [''.join(filter(str.isalnum, w)) for w in s]
+        words = s.split(' ')
+        words = [''.join(filter(str.isalnum, w)) for w in words]
         for w in words:
             if (w in word_occurance): 
                 word_occurance[w] += 1
             else:
                 word_occurance[w] = 1
-    idf_score = {(k, log(word_occurance[k]/len(sentences))) for k in uniq_list}
+    idf_score = {k : math.log(word_occurance[k]/len(sentences)) for k in uniq_list}
     # TF-IDF score
-    word_score = {(k,tf_score[k] * idf_score[k]) for k in uniq_list}
+    word_score = {k : tf_score[k] * idf_score[k] for k in uniq_list}
 
     # Return top X number of keywords
     # -------------------------------------------------------------

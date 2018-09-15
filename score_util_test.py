@@ -1,8 +1,8 @@
-import score_util
+from score_util import keywordsInDoc
 
 article_set = [
-"hi",
-"I am a really short article",
+"hi\n",
+"I am a really short article\n",
 """ 
 Updated 5:47 PM ET, Fri September 14, 2018
 Editor's Note: Andre Spicer is a professor of organizational behavior at Cass Business School, City, University of London. He and Carl Cederstrom are co-authors of "The Wellness Syndrome" and "Desperately Seeking Self-Improvement." The opinions expressed in this commentary are solely those of the author. View more opinion articles on CNN.
@@ -36,9 +36,36 @@ The new legislation could mean lower growth opportunities, more cost and less pr
 This has been both through direct lobbying (which it spent over 5 million euros on in 2016 alone), as well as indirect lobbying undertaken by the 24 lobbying organizations in Brussels it regularly funds. Bureaucrats working in the European Commission have declared the amount of lobbying from both sides of the argument "astonishing."
 
 There is a big chance that as big tech battles it out with legacy media in a lobby war in Brussels, the one group that will lose out are the people who actually create the photos, songs and texts we share every day, and are unrewarded. What about them?
+""",
+
+""" 
+“Having witnessed the breathtaking corruption and bizarre antics of U.S. President Donald Trump for the past two years, it never occurred to me that the government of Canada, through the careless creation — without limits or restrictions — of this small ‘escape clause,’ could have created a ‘wild card’ loophole that virtually guarantees that our decline into a police state will be swifter and more certain than theirs,” he wrote.
+
+He was speaking to Premier Doug Ford’s recent move to use the rarely invoked “notwithstanding” clause to enforce a cut to the size of Toronto city council for the upcoming election.
+
+Baumann, in an interview with the Star after forwarding his emailed letter to the newsroom, said he was hired as a tabulator officer whose responsibility it would have been to take ballots at a polling station and ensure they are counted. He said the city has accepted his resignation. He previously worked in a federal election and the 2014 municipal election, he said.
+
+“Wishing not to appear behind the times, or participate in this mockery, I will abstain from voting in this and all future elections,” Baumann added in his resignation letter.
+
+The longtime Torontonian and central Etobicoke resident said he was once a card-carrying Ontario PC party member, but he resigned that position too during the last election.
+
+“I’m not a Doug Ford supporter,” he said, adding his preference was Christine Elliott and that Ford doesn’t have the “right stuff for the job.”
+
+He said Ford has ignored proper process by interfering in the Toronto election in the midst on an ongoing campaign.
+
+“You don’t try to fix the engine when the plane is in the air,” he said. “You wait till you land before you start tinkering.”
 """
+
+
 ]
 
-for article in article_set:
-    l = keywordsInDoc(article, 3)
-    print (l)
+def runme():
+	for article in article_set:
+		l = keywordsInDoc(article,3)
+		print (l)
+
+if __name__ == "__main__":
+    runme()
+
+
+
