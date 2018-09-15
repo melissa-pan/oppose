@@ -74,4 +74,33 @@ def keywordsInDoc(string_block,numKw):
             break
     
     return result
-    
+
+
+
+####################################################################################
+# get_keywords_to_crawl  
+#   Description: 
+#     Ratio out the balance between relevant words in the ariticle and the title 
+#   Input:
+#     string_block
+#       The character string that contain the document
+#   Output:
+#     dictionary of keywords with scores
+####################################################################################
+def get_keywords_to_crawl(title, relavent_words):
+    # error handelling
+    if not isinstance(title, str) or not isinstance(relavent_words,dict):
+        raise valueError("get_keywords_to_crawl: ERROR! pass in variables type is incorrect")
+    # empty string or relavent words
+    if relavent_words is None:
+        return [''.join(filter(str.isalnum, x)) for x in title.split()] 
+    elif title is None:
+        return relavent_words.keys()
+    else:
+        return None
+    # compare the word list and the words in title
+    # TODO: get the ratio
+    # TODO: compare to the library output
+
+        
+
