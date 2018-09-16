@@ -104,19 +104,30 @@ def get_keywords_to_crawl(title, relavent_words, nlp_keyword, numKw):
         list of top keywords to query in opposing site
     """
     # error handelling
-    if not isinstance(title, str) or not isinstance(relavent_words,list) or not isinstance(lib_keyword,list):
+    if not isinstance(title, str) or not isinstance(relavent_words,list) or not isinstance(nlp_keyword,list):
         raise valueError("get_keywords_to_crawl: ERROR! pass in variables type is incorrect")
-    if keyword_pool is None:
-        return None
+    
+    print ("My pass in variable is {}, {}, {}, {}\n".format(title,relavent_words,nlp_keyword, numKw))
+
     # parse title 
-    title_words = [''.join(filter(str.isalnum, x)) for x in title.split() if x not in stop_words]
+    title_words = [''.join(filter(str.isalnum, x)) for x in title.lower().split() if x not in stop_words]
+
+    # keyword pool for potential outputs
+    keyword_pool = title_words + relavent_words + nlp_keyword
+
     # calculate each single source of keywords
-    title_score = {k: (title_words[::-1].index(k) + 1) / len(title_words) for k in title_words} 
+    title_score = {k: 1 for k in title_words} 
+    title_score.update({k: 0 for k in keyword_pool if k not in title_words}) 
+
     relavent_word_score = {k: (relavent_words[::-1].index(k) + 1) / len(relavent_words) for k in relavent_words}
+    relavent_word_score.update({k: 0 for k in keyword_pool if k not in relavent_words}) 
+
     nlp_keyword_score = {k: (nlp_keyword[::-1].index(k) + 1) / len(nlp_keyword) for k in nlp_keyword}
+    nlp_keyword_score.update({k: 0 for k in keyword_pool if k not in nlp_keyword})
+
     # use the pre-defined ratio to get the keywords with the highest number of score
-    keyword_score = {k: title_score[k] * 0.8 + relavent_word_score[k] * 0.3 + nlp_keyword_score[k] * 0.1}
-    ranked_keyword = sorted(word_score, key=keyword_score.__getitem__)
+    keyword_score = {k: title_score[k] * 0.8 + relavent_word_score[k] * 0.3 + nlp_keyword_score[k] * 0.1 for k in relavent_words}
+    ranked_keyword = sorted(keyword_score, key=keyword_score.__getitem__)
     ranked_keyword.reverse()
    
     return ranked_keyword[:numKw]

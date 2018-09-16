@@ -61,7 +61,7 @@ He said Ford has ignored proper process by interfering in the Toronto election i
 
 def runme():
 	for article in article_set:
-		l = keywordsInDoc(article,3)
+		l = keywordsInDoc(article,10)
 		print (l)
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@
 # Utility Functions that scrape the new article site
 ####################################################################################
 from newspaper import Article
+from score_util import keywordsInDoc, get_keywords_to_crawl
 import score_util
 
 ####################################################################################
