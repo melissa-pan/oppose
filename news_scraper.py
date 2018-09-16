@@ -32,6 +32,7 @@ def news_scrape(url, numKw):
     high_score_words = keywordsInDoc(text, numKw)
     keywords = get_keywords_to_crawl(title,high_score_words,lib_keyword, numKw)
 
+    # TODO: return news info in dictionary type? which also includes publish time
     if "thestar" in url:
         return ("torontosun", keywords)
     elif "torontosun" in url:
