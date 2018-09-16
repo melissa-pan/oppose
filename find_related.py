@@ -79,16 +79,17 @@ def find_related_articles(data, keywords):
             title = article.find_all("h4")[0].get_text()
             article_data.append({"url": url, "img_url": img_url, "title": title})
 
-
-        for x in article_data: print (x)
-        article_data = filter( lambda x : _relevent_date_sun(x,date) , article_data)
+        final_data = []
+        for x in filter( lambda x : _relevent_date_sun(x,date) , article_data):
+            print(x)
+            final_data.append(x)
 
 
     else:
         print("error: this website is not supported")
         exit(1)
 
-    return article_data
+    return final_data
 
 if __name__== '__main__':
     find_related_articles(["climate", "change"], "toronto star")
