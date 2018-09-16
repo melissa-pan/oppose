@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+import urllib
 
 app = Flask(__name__)
 CORS(app)
@@ -8,7 +9,7 @@ CORS(app)
 def hello():
 	# REPLACE THIS LINE
 	# request.args['url'] is how you get url of the article the user is on
-	print(request.args['url'])
+	print(urllib.unquote(request.args['url']))
 
 	# Response should be an array of objects
 	# Each object should have the title, the url, and the image url

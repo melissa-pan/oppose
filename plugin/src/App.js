@@ -1,8 +1,9 @@
+/*global chrome*/
 import React, { Component } from 'react';
 import './App.css';
+import { default as _map } from 'lodash/map';
 
 const API = 'http://127.0.0.1:5000/article?url=';
-const query = encodeURIComponent(window.location.href);
 
 class App extends Component {
   constructor(props) {
@@ -11,16 +12,61 @@ class App extends Component {
       content: (
         <div className="loading">News Articles Loading</div>
       ),
+      url: '',
     };
   }
 
   render() {
-    	fetch(API + query)
-      .then(response => console.log(JSON.stringify(response.json())));
+    let articles = [];
+    if (this.state.url === '') {
+      chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT},
+        (tabs) => {
+          this.setState({ url: encodeURIComponent(tabs[0].url) })
+        }
+      );
+    } else if (!Array.isArray(this.state.content)) {
+      fetch(API + this.state.url)
+        .then(response => response.json())
+        .then(result => this.setState({ content: result }));
+    }
+
+    if(Array.isArray(this.state.content)) {
+      articles = _map(
+        this.state.content,
+        (item, index) => {
+          if (index === this.state.content.length - 1) {
+            return (
+              <div>
+                <p><a href={item.url}>{item.title}</a></p>
+                <img src={item.image} width="150" />
+              </div>
+            );
+          }
+          return (
+            <div>
+              <p><a href={item.url}>{item.title}</a></p>
+              <img src={item.image} width="150" />
+              <hr />
+            </div>
+          );
+        }
+      );
+    }
+
+    const regex = new RegExp('.*(thestar.com|torontosun.com)/(news|opinion|life|entertainment|sports).*');
+
+    let popupContent;
+    if(this.state.url === '') {
+      popupContent = this.state.content;
+    } else if (!regex.test(decodeURIComponent(this.state.url))) {
+      popupContent = 'Extension not current available.'
+    } else if (Array.isArray(this.state.content)) {
+      popupContent = articles;
+    }
 
     return (
       <div className="App">
-        {this.state.content}
+        {popupContent}
       </div>
     );
   }
