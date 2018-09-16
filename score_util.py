@@ -10,18 +10,18 @@ stop_words = set(stopwords.words('english'))
 my_stop_words = ['']
 stop_words = set(list(stop_words) + my_stop_words)
 
-####################################################################################
-# keywordsInDoc  
-#   Description: 
-#     Extract caller specified number of top keywords that has the highest relavency 
-#     score in the document using a modified TF-IDF algorithm
-#   Input:
-#     string_block
-#       The character string that contain the document
-#   Output:
-#     dictionary of keywords with scores
-####################################################################################
+# Finds keywords in a block of string using the idea of tf-idf algorithm
 def keywordsInDoc(string_block,numKw):
+    """
+    Description: 
+        Extract caller specified number of top keywords that has the highest relavency 
+        score in the document using a modified TF-IDF algorithm
+    Input:
+        string_block
+        The character string that contain the document
+    Output:
+        dictionary of keywords with scores
+    """
     # error handelling
     if not isinstance(string_block, str) or not isinstance(numKw,int):
         raise valueError("keywordsInDoc: ERROR! pass in variables type is incorrect")
@@ -89,23 +89,20 @@ def keywordsInDoc(string_block,numKw):
     # return {k:v for (k,v) in word_score.items() if k is in result}
 
 
-####################################################################################
-# get_keywords_to_crawl  
-#   Description: 
-#     Ratio out the balance between relevant words in the ariticle and the title 
-#     score system -- title weights 60%, nlp keywords weights 30%, tfidf weights 10%
-#
-#   Input:
-#     title - title of the article
-#     relavent_words - the list of words found by our tf-idf algorithm
-#     nlp_keyword - the list of words found by newspaper library
-#     numKw - number of top score keyword to output
-#
-#   Output:
-#     list of top keywords to query in opposing site
-#     
-####################################################################################
+# scoring system between three source of potential keyword
 def get_keywords_to_crawl(title, relavent_words, nlp_keyword, numKw):
+    """
+    Description: 
+        Ratio out the balance between relevant words in the ariticle and the title.
+        score system -- title weights 60%, nlp keywords weights 30%, tfidf weights 10%
+    Input:
+        title - title of the article
+        relavent_words - the list of words found by our tf-idf algorithm
+        nlp_keyword - the list of words found by newspaper library
+        numKw - number of top score keyword to output
+    Output:
+        list of top keywords to query in opposing site
+    """
     # error handelling
     if not isinstance(title, str) or not isinstance(relavent_words,list) or not isinstance(lib_keyword,list):
         raise valueError("get_keywords_to_crawl: ERROR! pass in variables type is incorrect")

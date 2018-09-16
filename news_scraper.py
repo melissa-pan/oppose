@@ -31,11 +31,15 @@ def news_scrape(url, numKw):
     # extract search keywords from the article
     high_score_words = keywordsInDoc(text, numKw)
     keywords = get_keywords_to_crawl(title,high_score_words,lib_keyword, numKw)
+   
+    news = {"date":date}
 
     # TODO: return news info in dictionary type? which also includes publish time
     if "thestar" in url:
-        return ("torontosun", keywords)
+        news["domain"] = "torontosun"
     elif "torontosun" in url:
-        return ("thestar",keywords)
+        news["domain"] = "thestar"
     else:
         raise NotImplementedError("Sorry, this news site is not currently supported yet")
+
+    return (news,keywords)
