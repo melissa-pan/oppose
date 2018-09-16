@@ -1,5 +1,5 @@
 nltk
-newspaper
+newspaper3k
 urllib
 datetime
 ssl
