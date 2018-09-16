@@ -51,7 +51,7 @@ def find_related_articles(data, keywords):
     date = data['date']
     if site == "thestar":
         first_html_child = 0
-        soup = _get_search_html("https://www.thestar.com/search.html?sortby=relevance&sortdirection=desc&q=", keywords, "%20")
+        soup = _get_search_html("https://www.thestar.com/search.html?sortby=relevance&sortdirection=desc&q=", [keywords[0]], "%20")
 
         # extract stories to crawl
         for article in soup.find_all("div", {"class": "story"}):
@@ -68,7 +68,7 @@ def find_related_articles(data, keywords):
 
     elif site == "torontosun":
         print("bilbo")
-        soup = _get_search_html("https://torontosun.com/?s=", keywords, "+")
+        soup = _get_search_html("https://torontosun.com/?s=", [keywords[0]], "+")
         # print(soup.prettify())
 
         # extract stories to crawl
