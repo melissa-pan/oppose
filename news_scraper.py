@@ -1,3 +1,6 @@
+####################################################################################
+# Utility Functions that scrape the new article site
+####################################################################################
 from newspaper import Article
 import score_util
 
@@ -8,10 +11,11 @@ import score_util
 #     the article text
 #   Input:
 #     url link
+#     number of keywords
 #   Output:
 #     dictionary of keywords with scores
 ####################################################################################
-def news_scrape(url):
+def news_scrape(url, numKw):
     # Get web content
     article = Article(url)
     article.download()
@@ -21,9 +25,12 @@ def news_scrape(url):
     date = article.publish_date
     text = article.text
 
-    # extract search keywords from the article 
-    high_score_words = keywordsInDoc(text, 5)
-    keywords = get_keywords_to_crawl(title,high_score_words)
+    article.nlp()
+    lib_keyword = article.keywords
+
+    # extract search keywords from the article
+    high_score_words = keywordsInDoc(text, numKw)
+    keywords = get_keywords_to_crawl(title,high_score_words,lib_keyword, numKw)
 
     if "thestar" in url:
         return ("torontosun", keywords)

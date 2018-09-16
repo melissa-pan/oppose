@@ -1,10 +1,11 @@
-# python librarys to download:
+# Python librarys to download:
 BeautifulSoup
 Requests
 nltk
+newspaper
 
 
-# step to setup for nltk data: 
+# Step to setup for nltk data: 
 import nltk
 import ssl
 

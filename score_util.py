@@ -48,14 +48,12 @@ def keywordsInDoc(string_block,numKw):
     if len(uniq_list) < numKw:
         word_score = {k : 1 for k in uniq_list}
         return word_score
-
     
     # Calculate TF-IDF score for all unique words
     # --------------------------------------------------------------
     # TF score
     word_freq = {k : word_list.count(k) for k in uniq_list}
     tf_score = {k : word_freq[k]/len(word_list) for k in uniq_list}
-
     # print ("word score is: {}".format(tf_score))
 
     # IDF score
@@ -86,34 +84,48 @@ def keywordsInDoc(string_block,numKw):
         else:
             break
     
+    word_score = {k : tf_score[k] * idf_score[k] for k in uniq_list}
     return result
-
+    # return {k:v for (k,v) in word_score.items() if k is in result}
 
 
 ####################################################################################
 # get_keywords_to_crawl  
 #   Description: 
 #     Ratio out the balance between relevant words in the ariticle and the title 
+#     score system -- title weights 60%, nlp keywords weights 30%, tfidf weights 10%
+#
 #   Input:
-#     string_block
-#       The character string that contain the document
+#     title - title of the article
+#     relavent_words - the list of words found by our tf-idf algorithm
+#     nlp_keyword - the list of words found by newspaper library
+#     numKw - number of top score keyword to output
+#
 #   Output:
-#     dictionary of keywords with scores
+#     list of top keywords to query in opposing site
+#     
 ####################################################################################
-def get_keywords_to_crawl(title, relavent_words):
+def get_keywords_to_crawl(title, relavent_words, nlp_keyword, numKw):
     # error handelling
-    if not isinstance(title, str) or not isinstance(relavent_words,dict):
+    if not isinstance(title, str) or not isinstance(relavent_words,list) or not isinstance(lib_keyword,list):
         raise valueError("get_keywords_to_crawl: ERROR! pass in variables type is incorrect")
-    # empty string or relavent words
-    if relavent_words is None:
-        return [''.join(filter(str.isalnum, x)) for x in title.split()] 
-    elif title is None:
-        return relavent_words.keys()
-    else:
+    if keyword_pool is None:
         return None
-    # compare the word list and the words in title
-    # TODO: get the ratio
-    # TODO: compare to the library output
+    # parse title 
+    title_words = [''.join(filter(str.isalnum, x)) for x in title.split() if x not in stop_words]
+    # calculate each single source of keywords
+    title_score = {k: (title_words[::-1].index(k) + 1) / len(title_words) for k in title_words} 
+    relavent_word_score = {k: (relavent_words[::-1].index(k) + 1) / len(relavent_words) for k in relavent_words}
+    nlp_keyword_score = {k: (nlp_keyword[::-1].index(k) + 1) / len(nlp_keyword) for k in nlp_keyword}
+    # use the pre-defined ratio to get the keywords with the highest number of score
+    keyword_score = {k: title_score[k] * 0.8 + relavent_word_score[k] * 0.3 + nlp_keyword_score[k] * 0.1}
+    ranked_keyword = sorted(word_score, key=keyword_score.__getitem__)
+    ranked_keyword.reverse()
+   
+    return ranked_keyword[:numKw]
+
+
+
 
         
 
