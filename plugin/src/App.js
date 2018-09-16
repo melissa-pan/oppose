@@ -13,10 +13,12 @@ class App extends Component {
         <div className="loading">News Articles Loading</div>
       ),
       url: '',
+      request: 0,
     };
   }
 
   render() {
+    console.log(this.state.request);
     let articles = [];
     if (this.state.url === '') {
       chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT},
@@ -24,16 +26,20 @@ class App extends Component {
           this.setState({ url: encodeURIComponent(tabs[0].url) })
         }
       );
-    } else if (!Array.isArray(this.state.content)) {
+    } else if (!Array.isArray(this.state.content) && this.state.request === 0) {
       fetch(API + this.state.url)
         .then(response => response.json())
         .then(result => this.setState({ content: result }));
+      this.setState({ request: 1 });
     }
+
+    console.log(this.state.content);
 
     if(Array.isArray(this.state.content)) {
       articles = _map(
         this.state.content,
         (item, index) => {
+          console.log(this.state.content);
           if (index === this.state.content.length - 1) {
             return (
               <div>
