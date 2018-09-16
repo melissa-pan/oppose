@@ -15,4 +15,4 @@ def news_pipline(url):
     find_related_articles(news, keyword)
 
 if __name__ == "__main__":
-    news_pipline("www.thestar.com")
+    news_pipline("https://www.thestar.com/")
