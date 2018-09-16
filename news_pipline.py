@@ -12,7 +12,8 @@ def news_pipline(url):
     """
     num_keyword = 3
     (news,keyword) = news_scrape(url, num_keyword)
-    find_related_articles(news, keyword)
+    for x in find_related_articles(news, keyword):
+        print (x)
 
 if __name__ == "__main__":
-    news_pipline("https://www.thestar.com/")
+    news_pipline("https://www.thestar.com/business/2015/11/05/exxonmobil-investigated-over-claims-it-misled-public-about-climate-change.html")

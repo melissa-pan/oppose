@@ -1,6 +1,4 @@
 nltk
 newspaper3k
-urllib
 datetime
-ssl
 

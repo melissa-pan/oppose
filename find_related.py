@@ -44,9 +44,10 @@ def _get_search_html(domain_name, keywords, keyword_separator):
     return BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
 
 
-def find_related_articles(keywords, site):
+def find_related_articles(data, keywords):
     article_data = []
-
+    site = data['domain']
+    date = data['date']
     if site == "thestar":
         first_html_child = 0
         soup = _get_search_html("https://www.thestar.com/search.html?sortby=relevance&sortdirection=desc&q=", keywords, "%20")
@@ -63,7 +64,7 @@ def find_related_articles(keywords, site):
             article_data.append({"url": url, "img_url": img_url, "title": title})
 
 
-        article_data = filter( lambda x : _relevent_date_star(x,datetime.datetime.now()) , article_data)
+        article_data = filter( lambda x : _relevent_date_star(x,date) , article_data)
 
     elif site == "torontosun":
         soup = _get_search_html("https://torontosun.com/?s=", keywords, "+")
@@ -75,7 +76,7 @@ def find_related_articles(keywords, site):
             title = article.find_all("h4")[0].get_text()
             article_data.append({"url": url, "img_url": img_url, "title": title})
 
-        article_data = filter( lambda x : _relevent_date_sun(x,datetime.datetime.now()) , article_data)
+        article_data = filter( lambda x : _relevent_date_sun(x,date) , article_data)
 
 
     else:
