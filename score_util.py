@@ -107,7 +107,7 @@ def get_keywords_to_crawl(title, relavent_words, nlp_keyword, numKw):
     if not isinstance(title, str) or not isinstance(relavent_words,list) or not isinstance(nlp_keyword,list):
         raise valueError("get_keywords_to_crawl: ERROR! pass in variables type is incorrect")
     
-    # print ("My pass in variable is {}, {}, {}, {}\n".format(title,relavent_words,nlp_keyword, numKw))
+    print ("My pass in variable is {}, {}, {}, {}\n".format(title,relavent_words,nlp_keyword, numKw))
 
     # parse title 
     title_words = [''.join(filter(str.isalnum, x)) for x in title.lower().split() if x not in stop_words]

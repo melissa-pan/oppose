@@ -41,6 +41,7 @@ def _get_search_html(domain_name, keywords, keyword_separator):
     url = domain_name
     keywords = " ".join(keywords).replace(" ", keyword_separator)
     url += keywords
+    print(url)
     return BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
 
 
@@ -55,7 +56,6 @@ def find_related_articles(data, keywords):
         # extract stories to crawl
         for article in soup.find_all("div", {"class": "story"}):
             url = "https://www.thestar.com" + article.find_all("a")[0]["href"]
-            print(article)
             try:
                 img_url = "https://www.thestar.com" + article.find_all("img")[0]["src"]
             except:
@@ -67,15 +67,20 @@ def find_related_articles(data, keywords):
         article_data = filter( lambda x : _relevent_date_star(x,date) , article_data)
 
     elif site == "torontosun":
+        print("bilbo")
         soup = _get_search_html("https://torontosun.com/?s=", keywords, "+")
+        # print(soup.prettify())
 
         # extract stories to crawl
         for article in soup.find_all('article'):
+
             url = article.contents[1].contents[1].get('href')
             img_url = article.contents[1].contents[1].contents[1]["src"]
             title = article.find_all("h4")[0].get_text()
             article_data.append({"url": url, "img_url": img_url, "title": title})
 
+
+        for x in article_data: print (x)
         article_data = filter( lambda x : _relevent_date_sun(x,date) , article_data)
 
 
