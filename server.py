@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import urllib
+from news_pipline import news_pipline
 
 app = Flask(__name__)
 CORS(app)
@@ -9,7 +10,11 @@ CORS(app)
 def hello():
 	# REPLACE THIS LINE
 	# request.args['url'] is how you get url of the article the user is on
-	print(urllib.unquote(request.args['url']))
+	# print(urllib.unquote(request.args['url']))
+	a = news_pipline(urllib.parse.unquote(request.args['url']))
+	# a = news_pipline("https://www.thestar.com/business/2015/11/05/exxonmobil-investigated-over-claims-it-misled-public-about-climate-change.html")
+	print(a);
+
 
 	# Response should be an array of objects
 	# Each object should have the title, the url, and the image url
@@ -32,5 +37,5 @@ def hello():
 		},
 
 	]
-	return jsonify(sample_response)
+	return jsonify(a)
 
